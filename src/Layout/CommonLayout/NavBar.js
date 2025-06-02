@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
 import {
-  Col,
-  Row,
   Container,
   Collapse,
   NavbarToggler,
   NavItem,
-  NavLink,
   Dropdown,
   DropdownToggle,
   DropdownMenu
 } from "reactstrap";
 
 import { Link } from "react-router-dom";
-import classname from "classnames";
-import withRouter from "../../components/withRouter"
+import withRouter from "../../components/withRouter";
 
 import darkLogo from "../../assets/images/logo-dark.png";
 import lightLogo from "../../assets/images/logo-light.png";
@@ -28,15 +24,12 @@ const NavBar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
-  //Notification Dropdown
   const [notification, setNotification] = useState(false);
   const dropDownnotification = () => setNotification((prevState) => !prevState);
 
-  //user Profile Dropdown
   const [userProfile, setUserProfile] = useState(false);
   const dropDownuserprofile = () => setUserProfile((prevState) => !prevState);
 
-  //scroll navbar
   const [navClass, setnavClass] = useState(false);
 
   useEffect(() => {
@@ -44,22 +37,18 @@ const NavBar = (props) => {
   });
 
   function scrollNavigation() {
-    var scrollup = window.pageYOffset;
-    if (scrollup > 0) {
-      setnavClass("nav-sticky");
-    } else {
-      setnavClass("");
-    }
+    const scrollup = window.pageYOffset;
+    setnavClass(scrollup > 0 ? "nav-sticky" : "");
   }
-  //menu activation
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     const pathName = props.router.location.pathname;
-    var matchingMenuItem = null;
-    var ul = document.getElementById("navbarCollapse");
-    var items = ul.getElementsByTagName("a");
+    let matchingMenuItem = null;
+    const ul = document.getElementById("navbarCollapse");
+    const items = ul.getElementsByTagName("a");
     removeActivation(items);
-    for (var i = 0; i < items.length; ++i) {
+    for (let i = 0; i < items.length; ++i) {
       if (pathName === items[i].pathname) {
         matchingMenuItem = items[i];
         break;
@@ -71,47 +60,23 @@ const NavBar = (props) => {
   }, [props.router.location.pathname]);
 
   const removeActivation = (items) => {
-    for (var i = 0; i < items.length; ++i) {
-      var item = items[i];
+    for (let i = 0; i < items.length; ++i) {
+      const item = items[i];
       const parent = items[i].parentElement;
-      if (item && item.classList.contains("active")) {
-        item.classList.remove("active");
-      }
-      if (parent) {
-        if (parent.classList.contains("active")) {
-          parent.classList.remove("active");
-        }
-      }
+      item?.classList.remove("active");
+      parent?.classList.remove("active");
     }
   };
 
-  function activateParentDropdown(item) {
+  const activateParentDropdown = (item) => {
     item.classList.add("active");
-    const parent = item.parentElement.parentElement.parentElement;
-
-    if (parent) {
-      parent.classList.add("active"); // li
-      const parent2 = parent.parentElement;
-      parent2.classList.add("active"); // li
-      const parent3 = parent2.parentElement;
-      if (parent3) {
-        parent3.classList.add("active"); // li
-        const parent4 = parent3.parentElement;
-        if (parent4) {
-          parent4.classList.add("active"); // li
-          const parent5 = parent4.parentElement;
-          if (parent5) {
-            parent5.classList.add("active"); // li
-            const parent6 = parent5.parentElement;
-            if (parent6) {
-              parent6.classList.add("active"); // li
-            }
-          }
-        }
-      }
+    let parent = item.parentElement;
+    for (let i = 0; i < 6; i++) {
+      if (!parent) break;
+      parent = parent.parentElement;
+      parent?.classList.add("active");
     }
-    return false;
-  }
+  };
 
   return (
     <React.Fragment>
@@ -128,7 +93,7 @@ const NavBar = (props) => {
             <NavbarToggler
               className="me-3"
               type="button"
-              onClick={() => toggle()}
+              onClick={toggle}
             >
               <i className="mdi mdi-menu"></i>
             </NavbarToggler>
@@ -139,30 +104,15 @@ const NavBar = (props) => {
             id="navbarCollapse"
           >
             <ul className="navbar-nav mx-auto navbar-center">
-              <NavItem>
-                <Link className="nav-link" to="/">
-                  Home
-                </Link>
-              </NavItem>
-              <NavItem>
-                <Link className="nav-link" to="/joblist">
-                  Find a Job
-                </Link>
-              </NavItem>
-              <NavItem>
-                <Link className="nav-link" to="/aboutus">
-                  About Us
-                </Link>
-              </NavItem>
-              <NavItem>
-                <Link className="nav-link" to="/contact">
-                  Contact Us
-                </Link>
-              </NavItem>
+              <NavItem><Link className="nav-link" to="/">Home</Link></NavItem>
+              <NavItem><Link className="nav-link" to="/joblist">Find a Job</Link></NavItem>
+              <NavItem><Link className="nav-link" to="/aboutus">About Us</Link></NavItem>
+              <NavItem><Link className="nav-link" to="/contact">Contact Us</Link></NavItem>
             </ul>
           </Collapse>
 
           <ul className="header-menu list-inline d-flex align-items-center mb-0">
+            {/* Notification Dropdown */}
             <Dropdown
               isOpen={notification}
               toggle={dropDownnotification}
@@ -178,22 +128,14 @@ const NavBar = (props) => {
                 <i className="mdi mdi-bell fs-22"></i>
                 <div className="count position-absolute">3</div>
               </DropdownToggle>
-              <DropdownMenu
-                className="dropdown-menu-sm dropdown-menu-end p-0"
-                aria-labelledby="notification"
-                end
-              >
+              <DropdownMenu className="dropdown-menu-sm dropdown-menu-end p-0" aria-labelledby="notification" end>
                 <div className="notification-header border-bottom bg-light">
                   <h6 className="mb-1"> Notification </h6>
-                  <p className="text-muted fs-13 mb-0">
-                    You have 4 unread Notification
-                  </p>
+                  <p className="text-muted fs-13 mb-0">You have 4 unread Notification</p>
                 </div>
                 <div className="notification-wrapper dropdown-scroll">
-                  <Link
-                    to="#"
-                    className="text-dark notification-item d-block active"
-                  >
+                  {/* Notification Items */}
+                  <Link to="#" className="text-dark notification-item d-block active">
                     <div className="d-flex align-items-center">
                       <div className="flex-shrink-0 me-3">
                         <div className="avatar-xs bg-primary text-white rounded-circle text-center">
@@ -201,99 +143,63 @@ const NavBar = (props) => {
                         </div>
                       </div>
                       <div className="flex-grow-1">
-                        <h6 className="mt-0 mb-1 fs-14">
-                          22 verified registrations
-                        </h6>
-                        <p className="mb-0 fs-12 text-muted">
-                          <i className="mdi mdi-clock-outline"></i>{" "}
-                          <span>3 min ago</span>
-                        </p>
+                        <h6 className="mt-0 mb-1 fs-14">22 verified registrations</h6>
+                        <p className="mb-0 fs-12 text-muted"><i className="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
                       </div>
                     </div>
                   </Link>
                   <Link to="#" className="text-dark notification-item d-block">
                     <div className="d-flex align-items-center">
                       <div className="flex-shrink-0 me-3">
-                        <img
-                          src={userImage2}
-                          className="rounded-circle avatar-xs"
-                          alt="user-pic"
-                        />
+                        <img src={userImage2} className="rounded-circle avatar-xs" alt="user-pic" />
                       </div>
                       <div className="flex-grow-1">
                         <h6 className="mt-0 mb-1 fs-14">James Lemire</h6>
-                        <p className="text-muted fs-12 mb-0">
-                          <i className="mdi mdi-clock-outline"></i>{" "}
-                          <span>15 min ago</span>
-                        </p>
+                        <p className="text-muted fs-12 mb-0"><i className="mdi mdi-clock-outline"></i> <span>15 min ago</span></p>
                       </div>
                     </div>
                   </Link>
                   <Link to="#" className="text-dark notification-item d-block">
                     <div className="d-flex align-items-center">
                       <div className="flex-shrink-0 me-3">
-                        <img
-                          src={jobImage4}
-                          className="rounded-circle avatar-xs"
-                          alt="user-pic"
-                        />
+                        <img src={jobImage4} className="rounded-circle avatar-xs" alt="user-pic" />
                       </div>
                       <div className="flex-grow-1">
-                        <h6 className="mt-0 mb-1 fs-14">
-                          Applications has been approved
-                        </h6>
-                        <p className="text-muted mb-0 fs-12">
-                          <i className="mdi mdi-clock-outline"></i>{" "}
-                          <span>45 min ago</span>
-                        </p>
+                        <h6 className="mt-0 mb-1 fs-14">Applications has been approved</h6>
+                        <p className="text-muted mb-0 fs-12"><i className="mdi mdi-clock-outline"></i> <span>45 min ago</span></p>
                       </div>
                     </div>
                   </Link>
                   <Link to="#" className="text-dark notification-item d-block">
                     <div className="d-flex align-items-center">
                       <div className="flex-shrink-0 me-3">
-                        <img
-                          src={userImage1}
-                          className="rounded-circle avatar-xs"
-                          alt="user-pic"
-                        />
+                        <img src={userImage1} className="rounded-circle avatar-xs" alt="user-pic" />
                       </div>
                       <div className="flex-grow-1">
                         <h6 className="mt-0 mb-1 fs-14">Kevin Stewart</h6>
-                        <p className="text-muted mb-0 fs-12">
-                          <i className="mdi mdi-clock-outline"></i>{" "}
-                          <span>1 hour ago</span>
-                        </p>
+                        <p className="text-muted mb-0 fs-12"><i className="mdi mdi-clock-outline"></i> <span>1 hour ago</span></p>
                       </div>
                     </div>
                   </Link>
                   <Link to="#" className="text-dark notification-item d-block">
                     <div className="d-flex align-items-center">
                       <div className="flex-shrink-0 me-3">
-                        <img
-                          src={jobImage}
-                          className="rounded-circle avatar-xs"
-                          alt="user-pic"
-                        />
+                        <img src={jobImage} className="rounded-circle avatar-xs" alt="user-pic" />
                       </div>
                       <div className="flex-grow-1">
                         <h6 className="mt-0 mb-1 fs-15">Creative Agency</h6>
-                        <p className="text-muted mb-0 fs-12">
-                          <i className="mdi mdi-clock-outline"></i>{" "}
-                          <span>2 hour ago</span>
-                        </p>
+                        <p className="text-muted mb-0 fs-12"><i className="mdi mdi-clock-outline"></i> <span>2 hour ago</span></p>
                       </div>
                     </div>
                   </Link>
                 </div>
                 <div className="notification-footer border-top text-center">
-                  <Link className="primary-link fs-13" to="#">
-                    <i className="mdi mdi-arrow-right-circle me-1"></i>{" "}
-                    <span>View More..</span>
-                  </Link>
+                  <Link className="primary-link fs-13" to="#"><i className="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span></Link>
                 </div>
               </DropdownMenu>
             </Dropdown>
+
+            {/* User Profile Dropdown */}
             <Dropdown
               onClick={() => setUserProfile(!userProfile)}
               isOpen={userProfile}
@@ -308,42 +214,14 @@ const NavBar = (props) => {
                 tag="a"
                 aria-expanded="false"
               >
-                <img
-                  src={profileImage}
-                  alt="mdo"
-                  width="35"
-                  height="35"
-                  className="rounded-circle me-1"
-                />{" "}
-                <span className="d-none d-md-inline-block fw-medium">
-                  Hi, Jansh
-                </span>
+                <img src={profileImage} alt="mdo" width="35" height="35" className="rounded-circle me-1" />
+                <span className="d-none d-md-inline-block fw-medium">Hi, Jansh</span>
               </DropdownToggle>
-              <DropdownMenu
-                className="dropdown-menu-end"
-                aria-labelledby="userdropdown"
-                end
-              >
-                <li>
-                  <Link className="dropdown-item" to="/managejobs">
-                    Manage Jobs
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="/bookmarkjobs">
-                    Bookmarks Jobs
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="/myprofile">
-                    My Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="/signout">
-                    Logout
-                  </Link>
-                </li>
+              <DropdownMenu className="dropdown-menu-end" aria-labelledby="userdropdown" end>
+                <li><Link className="dropdown-item" to="/managejobs">Manage Jobs</Link></li>
+                <li><Link className="dropdown-item" to="/bookmarkjobs">Bookmarks Jobs</Link></li>
+                <li><Link className="dropdown-item" to="/myprofile">My Profile</Link></li>
+                <li><Link className="dropdown-item" to="/signout">Logout</Link></li>
               </DropdownMenu>
             </Dropdown>
           </ul>

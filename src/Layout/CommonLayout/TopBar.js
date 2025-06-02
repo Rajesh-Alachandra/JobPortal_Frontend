@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import {
-  Col,
   Container,
   Row,
+  Col,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
   Input,
   Modal,
   ModalBody,
@@ -16,44 +15,9 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 
-//import images
-import flagUs from "../../assets/images/flags/us.jpg";
-import flagSp from "../../assets/images/flags/spain.jpg";
-import flagGr from "../../assets/images/flags/germany.jpg";
-import flagIt from "../../assets/images/flags/italy.jpg";
-import flagRu from "../../assets/images/flags/russia.jpg";
-
 const TopBar = () => {
-  const iconTobar = [
-    {
-      id: 1,
-      classname: "uil uil-whatsapp"
-    },
-    {
-      id: 2,
-      classname: "uil uil-facebook-messenger-alt"
-    },
-    {
-      id: 3,
-      classname: "uil uil-instagram"
-    },
-    {
-      id: 4,
-      classname: "uil uil-envelope"
-    },
-    {
-      id: 5,
-      classname: "uil uil-twitter-alt"
-    }
-  ];
-  //Language Dropdown
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
-
-  //Signup Modal
+  // Signup Modal
   const [modal, setModal] = useState(false);
-
   const openModal = () => setModal(!modal);
 
   return (
@@ -62,28 +26,7 @@ const TopBar = () => {
         <Container fluid className="custom-container">
           <Row className="g-0 align-items-center">
             <Col md={7}>
-              {/* <ul className="list-inline mb-0 text-center text-md-start">
-                <li className="list-inline-item">
-                  <p className="fs-13 mb-0">
-                    {" "}
-                    <i className="mdi mdi-map-marker"></i> Your Location:{" "}
-                    <Link to="#" className="text-dark">
-                      New Caledonia
-                    </Link>
-                  </p>
-                </li>
-                <li className="list-inline-item">
-                  <ul className="topbar-social-menu list-inline mb-0">
-                    {(iconTobar || []).map((icon, key) => (
-                      <li className="list-inline-item" key={key}>
-                        <Link to="/" className="social-link">
-                          <i className={icon.classname}></i>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              </ul> */}
+              {/* Left side intentionally left empty or for future use */}
             </Col>
 
             <Col md={5}>
@@ -94,8 +37,7 @@ const TopBar = () => {
                     role="button"
                     className="text-dark fw-medium fs-13"
                   >
-                    <i className="uil uil-lock"></i>
-                    Sign Up
+                    <i className="uil uil-lock"></i> Sign Up
                   </span>
                   <Modal
                     isOpen={modal}
@@ -116,16 +58,12 @@ const TopBar = () => {
                           <div className="text-center mb-4">
                             <h5>Sign Up</h5>
                             <p className="text-muted">
-                              Sign Up and get access to all the features of
-                              Jobcy
+                              Sign Up and get access to all the features of Jobcy
                             </p>
                           </div>
                           <Form action="#" className="auth-form">
                             <FormGroup className="mb-3">
-                              <Label
-                                htmlFor="usernameInput"
-                                className="form-label"
-                              >
+                              <Label htmlFor="usernameInput" className="form-label">
                                 Username
                               </Label>
                               <Input
@@ -136,10 +74,7 @@ const TopBar = () => {
                               />
                             </FormGroup>
                             <FormGroup className="mb-3">
-                              <Label
-                                htmlFor="emailInput"
-                                className="form-label"
-                              >
+                              <Label htmlFor="emailInput" className="form-label">
                                 Email
                               </Label>
                               <Input
@@ -150,12 +85,9 @@ const TopBar = () => {
                               />
                             </FormGroup>
                             <FormGroup className="mb-3">
-                              <label
-                                htmlFor="passwordInput"
-                                className="form-label"
-                              >
+                              <Label htmlFor="passwordInput" className="form-label">
                                 Password
-                              </label>
+                              </Label>
                               <Input
                                 type="password"
                                 className="form-control"
@@ -185,23 +117,19 @@ const TopBar = () => {
                               </div>
                             </FormGroup>
                             <div className="text-center">
-                              <button
-                                type="submit"
-                                className="btn btn-primary w-100"
-                              >
+                              <button type="submit" className="btn btn-primary w-100">
                                 Sign Up
                               </button>
                             </div>
                           </Form>
                           <div className="mt-3 text-center">
                             <p className="mb-0">
-                              Already a member ?{" "}
+                              Already a member?{" "}
                               <Link
                                 to="/signin"
                                 className="form-text text-primary text-decoration-underline"
                               >
-                                {" "}
-                                Sign-in{" "}
+                                Sign-in
                               </Link>
                             </p>
                           </div>
@@ -220,3 +148,4 @@ const TopBar = () => {
 };
 
 export default TopBar;
+// 
