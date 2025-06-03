@@ -6,13 +6,13 @@ const PrivacyAndPolicyPage = () => {
   const privacyandpolicyPage = [
     {
       id: 1,
-      policyTitle: "Use for Jobcy",
+      policyTitle: "Use for Katlyst",
       policyRules: [
         {
           id: 1,
           policyInnerRule:
-            " At Jobcy, accessible at Website.com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Jobcy and how we use If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through email at",
-            bold:" Jobcytechnologypvt.ltd.com"
+            " At Katlyst, accessible at Website.com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Katlyst and how we use If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through email at",
+          bold: " Katlysttechnologypvt.ltd.com"
         },
         {
           id: 2,
@@ -22,12 +22,12 @@ const PrivacyAndPolicyPage = () => {
         {
           id: 3,
           policyInnerRule:
-            " This privacy policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in Jobcy. This policy is not applicable to any information collected offline or via channels other than this website."
+            " This privacy policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in Katlyst. This policy is not applicable to any information collected offline or via channels other than this website."
         },
         {
           id: 4,
           policyInnerRule:
-            " Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity to our website with regards to the information that they shared and/or collect in Jobcy. This policy is not applicable to any information collected offline or via channels other than this website."
+            " Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity to our website with regards to the information that they shared and/or collect in Katlyst. This policy is not applicable to any information collected offline or via channels other than this website."
         }
       ]
     },
@@ -62,7 +62,7 @@ const PrivacyAndPolicyPage = () => {
           id: 1,
           policyInnerRule:
             '  There is now an <b className=text-danger>"abundance</b> of readable dummy texts. These are usually used when a text is required purely to fill a space. These alternatives to the classic Lorem Ipsum texts are often amusing and tell short, funny or nonsensical stories.',
-            bold1:"abudance"
+          bold1: "abudance"
         },
         {
           id: 2,

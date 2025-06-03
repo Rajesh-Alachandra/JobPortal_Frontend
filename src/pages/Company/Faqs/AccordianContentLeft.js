@@ -40,7 +40,7 @@ const AccordianContentLeft = () => {
             onClick={toggleSecond}
             type="button"
           >
-            How Jobcy Work ?
+            How Katlyst Work ?
           </button>
         </h2>
         <Collapse isOpen={isCollapseSecond} id="buying-two">

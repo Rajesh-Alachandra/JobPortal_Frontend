@@ -45,11 +45,11 @@ const LeftSideContent = () => {
     <React.Fragment>
       {isGallery ? (
         <Lightbox
-        open={isGallery}
-        close={() => setisGallery(false)}
-        index={photoIndex}
-        slides={images.map((image) => ({ src: image }))}
-      />
+          open={isGallery}
+          close={() => setisGallery(false)}
+          index={photoIndex}
+          slides={images.map((image) => ({ src: image }))}
+        />
       ) : null}
       <Col lg={4}>
         <Card className="blog-author-sidebar  border-0 bg-light">
@@ -64,7 +64,7 @@ const LeftSideContent = () => {
                 />
                 <h6 className="fs-17">Gabriel Palmer</h6>
                 <p className="text-muted">
-                  Start working with Jobcy that can provide you need drive
+                  Start working with Katlyst that can provide you need drive
                   everything to generate awareness, traffic, connect.
                 </p>
               </div>

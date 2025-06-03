@@ -131,13 +131,14 @@ const employerRoutes = [
 
 // Job Seeker routes (accessible only to authenticated job seekers)
 const jobSeekerRoutes = [
+  { path: "/jobseeker/joblist", component: <JobList /> },
   { path: "/jobseeker/dashboard", component: <JobSeekerDashboard /> },
   { path: "/jobseeker/search-jobs", component: <SearchJobs /> },
   { path: "/jobseeker/applied-jobs", component: <AppliedJobs /> },
   { path: "/jobseeker/saved-jobs", component: <SavedJobs /> },
   { path: "/jobseeker/profile", component: <JobSeekerProfile /> },
   { path: "/jobseeker/bookmarkjobs", component: <BookMarkJobs /> },
-  { path: "/myprofile", component: <MyProfile /> },
+  { path: "/jobseeker/myprofile", component: <MyProfile /> },
 ];
 
 // Authentication routes
@@ -149,8 +150,8 @@ const authRoutes = [
   { path: "/jobseeker/register", component: <JobSeekerRegister /> },
 
   // General auth routes
-  { path: "/signin", component: <SignIn /> },
-  { path: "/signup", component: <SignUp /> },
+  // { path: "/signin", component: <SignIn /> },
+  // { path: "/signup", component: <SignUp /> },
   { path: "/signout", component: <SignOut /> },
   { path: "/resetpassword", component: <ResetPassword /> },
 

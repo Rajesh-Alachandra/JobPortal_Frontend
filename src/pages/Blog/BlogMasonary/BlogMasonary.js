@@ -4,7 +4,7 @@ import MasonaryContent from "../../Blog/BlogMasonary/MasonaryContent";
 
 const BlogMasonary = () => {
   document.title =
-    "Blog Masonary | Jobcy - Job Listing Template | Themesdesign";
+    "Blog Masonary | Katlyst - Job Listing Template | Themesdesign";
 
   return (
     <React.Fragment>

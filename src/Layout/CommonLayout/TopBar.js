@@ -58,7 +58,7 @@ const TopBar = () => {
                           <div className="text-center mb-4">
                             <h5>Sign Up</h5>
                             <p className="text-muted">
-                              Sign Up and get access to all the features of Jobcy
+                              Sign Up and get access to all the features of Katlyst
                             </p>
                           </div>
                           <Form action="#" className="auth-form">

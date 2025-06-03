@@ -8,7 +8,7 @@ import darkLogo from "../../assets/images/logo-dark.png";
 import signInImage from "../../assets/images/auth/sign-in.png";
 
 const EmployerRegister = () => {
-    document.title = "Sign Up | Jobcy - Job Listing Template";
+    document.title = "Sign Up | Katlyst - Job Listing Template";
 
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
@@ -234,7 +234,7 @@ const EmployerRegister = () => {
                                                         <div className="mt-4 text-center">
                                                             <p className="mb-0">
                                                                 Already registered?{" "}
-                                                                <Link to="/employerlogin" className="fw-medium text-white text-decoration-underline">
+                                                                <Link to="/employer/login" className="fw-medium text-white text-decoration-underline">
                                                                     Sign In
                                                                 </Link>
                                                             </p>

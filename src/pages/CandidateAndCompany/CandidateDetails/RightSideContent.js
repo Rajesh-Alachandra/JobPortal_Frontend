@@ -24,11 +24,11 @@ const RightSideContent = () => {
     <React.Fragment>
       {isGallery ? (
         <Lightbox
-        open={isGallery}
-        close={() => setisGallery(false)}
-        index={photoIndex}
-        slides={images.map((image) => ({ src: image }))}
-      />
+          open={isGallery}
+          close={() => setisGallery(false)}
+          index={photoIndex}
+          slides={images.map((image) => ({ src: image }))}
+        />
       ) : null}
       <Col lg={8}>
         <Card className="candidate-details ms-lg-4 mt-4 mt-lg-0">
@@ -141,7 +141,7 @@ const RightSideContent = () => {
                 <div className="ms-4">
                   <h6 className="fs-16 mb-1">Project Manager</h6>
                   <p className="mb-2 text-muted">
-                    Jobcy Technology Pvt.Ltd - (Pressent)
+                    Katlyst Technology Pvt.Ltd - (Pressent)
                   </p>
                   <p className="text-muted mb-0">
                     There are many variations of passages of available, but the

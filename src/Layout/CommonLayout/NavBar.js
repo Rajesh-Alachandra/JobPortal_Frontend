@@ -1,3 +1,4 @@
+// Updated NavBar with role-based navigation
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -8,19 +9,18 @@ import {
   DropdownToggle,
   DropdownMenu
 } from "reactstrap";
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../components/AuthContext";
 import withRouter from "../../components/withRouter";
 
 import darkLogo from "../../assets/images/logo-dark.png";
 import lightLogo from "../../assets/images/logo-light.png";
-import userImage2 from "../../assets/images/user/img-02.jpg";
-import jobImage4 from "../../assets/images/featured-job/img-04.png";
-import userImage1 from "../../assets/images/user/img-01.jpg";
-import jobImage from "../../assets/images/featured-job/img-01.png";
 import profileImage from "../../assets/images/profile.jpg";
 
 const NavBar = (props) => {
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
@@ -41,41 +41,37 @@ const NavBar = (props) => {
     setnavClass(scrollup > 0 ? "nav-sticky" : "");
   }
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    const pathName = props.router.location.pathname;
-    let matchingMenuItem = null;
-    const ul = document.getElementById("navbarCollapse");
-    const items = ul.getElementsByTagName("a");
-    removeActivation(items);
-    for (let i = 0; i < items.length; ++i) {
-      if (pathName === items[i].pathname) {
-        matchingMenuItem = items[i];
-        break;
-      }
-    }
-    if (matchingMenuItem) {
-      activateParentDropdown(matchingMenuItem);
-    }
-  }, [props.router.location.pathname]);
-
-  const removeActivation = (items) => {
-    for (let i = 0; i < items.length; ++i) {
-      const item = items[i];
-      const parent = items[i].parentElement;
-      item?.classList.remove("active");
-      parent?.classList.remove("active");
-    }
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
-  const activateParentDropdown = (item) => {
-    item.classList.add("active");
-    let parent = item.parentElement;
-    for (let i = 0; i < 6; i++) {
-      if (!parent) break;
-      parent = parent.parentElement;
-      parent?.classList.add("active");
+  // Get role-specific navigation items
+  const getRoleBasedNavItems = () => {
+    if (!isAuthenticated()) return null;
+
+    if (user.role === 'employer') {
+      return (
+        <>
+          <li><Link className="dropdown-item" to="/employer/dashboard">Dashboard</Link></li>
+          <li><Link className="dropdown-item" to="/employer/post-job">Post Job</Link></li>
+          <li><Link className="dropdown-item" to="/employer/manage-jobs">Manage Jobs</Link></li>
+          <li><Link className="dropdown-item" to="/employer/applications">Applications</Link></li>
+          <li><Link className="dropdown-item" to="/employer/profile">My Profile</Link></li>
+        </>
+      );
+    } else if (user.role === 'jobseeker') {
+      return (
+        <>
+          <li><Link className="dropdown-item" to="/jobseeker/dashboard">Dashboard</Link></li>
+          <li><Link className="dropdown-item" to="/jobseeker/search-jobs">Search Jobs</Link></li>
+          <li><Link className="dropdown-item" to="/jobseeker/applied-jobs">Applied Jobs</Link></li>
+          <li><Link className="dropdown-item" to="/jobseeker/saved-jobs">Saved Jobs</Link></li>
+          <li><Link className="dropdown-item" to="/jobseeker/profile">My Profile</Link></li>
+        </>
+      );
     }
+    return null;
   };
 
   return (
@@ -112,118 +108,102 @@ const NavBar = (props) => {
           </Collapse>
 
           <ul className="header-menu list-inline d-flex align-items-center mb-0">
-            {/* Notification Dropdown */}
-            <Dropdown
-              isOpen={notification}
-              toggle={dropDownnotification}
-              className="list-inline-item  me-4"
-            >
-              <DropdownToggle
-                href="#"
-                className="header-item noti-icon position-relative"
-                id="notification"
-                type="button"
-                tag="a"
-              >
-                <i className="mdi mdi-bell fs-22"></i>
-                <div className="count position-absolute">3</div>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-sm dropdown-menu-end p-0" aria-labelledby="notification" end>
-                <div className="notification-header border-bottom bg-light">
-                  <h6 className="mb-1"> Notification </h6>
-                  <p className="text-muted fs-13 mb-0">You have 4 unread Notification</p>
-                </div>
-                <div className="notification-wrapper dropdown-scroll">
-                  {/* Notification Items */}
-                  <Link to="#" className="text-dark notification-item d-block active">
-                    <div className="d-flex align-items-center">
-                      <div className="flex-shrink-0 me-3">
-                        <div className="avatar-xs bg-primary text-white rounded-circle text-center">
-                          <i className="uil uil-user-check"></i>
+            {/* Show login buttons if not authenticated */}
+            {!isAuthenticated() ? (
+              <>
+                <li className="list-inline-item me-3">
+                  <Link to="/employer/login" className="btn btn-outline-primary btn-sm">
+                    Employer Login
+                  </Link>
+                </li>
+                <li className="list-inline-item">
+                  <Link to="/jobseeker/login" className="btn btn-primary btn-sm">
+                    Job Seeker Login
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                {/* Notification Dropdown - only for authenticated users */}
+                <Dropdown
+                  isOpen={notification}
+                  toggle={dropDownnotification}
+                  className="list-inline-item me-4"
+                >
+                  <DropdownToggle
+                    href="#"
+                    className="header-item noti-icon position-relative"
+                    id="notification"
+                    type="button"
+                    tag="a"
+                  >
+                    <i className="mdi mdi-bell fs-22"></i>
+                    <div className="count position-absolute">3</div>
+                  </DropdownToggle>
+                  <DropdownMenu className="dropdown-menu-sm dropdown-menu-end p-0" end>
+                    <div className="notification-header border-bottom bg-light">
+                      <h6 className="mb-1">Notifications</h6>
+                      <p className="text-muted fs-13 mb-0">You have 3 unread notifications</p>
+                    </div>
+                    <div className="notification-wrapper dropdown-scroll">
+                      <Link to="#" className="text-dark notification-item d-block">
+                        <div className="d-flex align-items-center">
+                          <div className="flex-shrink-0 me-3">
+                            <div className="avatar-xs bg-primary text-white rounded-circle text-center">
+                              <i className="uil uil-bell"></i>
+                            </div>
+                          </div>
+                          <div className="flex-grow-1">
+                            <h6 className="mt-0 mb-1 fs-14">New notification</h6>
+                            <p className="mb-0 fs-12 text-muted">
+                              <i className="mdi mdi-clock-outline"></i> <span>5 min ago</span>
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex-grow-1">
-                        <h6 className="mt-0 mb-1 fs-14">22 verified registrations</h6>
-                        <p className="mb-0 fs-12 text-muted"><i className="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
-                      </div>
+                      </Link>
                     </div>
-                  </Link>
-                  <Link to="#" className="text-dark notification-item d-block">
-                    <div className="d-flex align-items-center">
-                      <div className="flex-shrink-0 me-3">
-                        <img src={userImage2} className="rounded-circle avatar-xs" alt="user-pic" />
-                      </div>
-                      <div className="flex-grow-1">
-                        <h6 className="mt-0 mb-1 fs-14">James Lemire</h6>
-                        <p className="text-muted fs-12 mb-0"><i className="mdi mdi-clock-outline"></i> <span>15 min ago</span></p>
-                      </div>
-                    </div>
-                  </Link>
-                  <Link to="#" className="text-dark notification-item d-block">
-                    <div className="d-flex align-items-center">
-                      <div className="flex-shrink-0 me-3">
-                        <img src={jobImage4} className="rounded-circle avatar-xs" alt="user-pic" />
-                      </div>
-                      <div className="flex-grow-1">
-                        <h6 className="mt-0 mb-1 fs-14">Applications has been approved</h6>
-                        <p className="text-muted mb-0 fs-12"><i className="mdi mdi-clock-outline"></i> <span>45 min ago</span></p>
-                      </div>
-                    </div>
-                  </Link>
-                  <Link to="#" className="text-dark notification-item d-block">
-                    <div className="d-flex align-items-center">
-                      <div className="flex-shrink-0 me-3">
-                        <img src={userImage1} className="rounded-circle avatar-xs" alt="user-pic" />
-                      </div>
-                      <div className="flex-grow-1">
-                        <h6 className="mt-0 mb-1 fs-14">Kevin Stewart</h6>
-                        <p className="text-muted mb-0 fs-12"><i className="mdi mdi-clock-outline"></i> <span>1 hour ago</span></p>
-                      </div>
-                    </div>
-                  </Link>
-                  <Link to="#" className="text-dark notification-item d-block">
-                    <div className="d-flex align-items-center">
-                      <div className="flex-shrink-0 me-3">
-                        <img src={jobImage} className="rounded-circle avatar-xs" alt="user-pic" />
-                      </div>
-                      <div className="flex-grow-1">
-                        <h6 className="mt-0 mb-1 fs-15">Creative Agency</h6>
-                        <p className="text-muted mb-0 fs-12"><i className="mdi mdi-clock-outline"></i> <span>2 hour ago</span></p>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-                <div className="notification-footer border-top text-center">
-                  <Link className="primary-link fs-13" to="#"><i className="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span></Link>
-                </div>
-              </DropdownMenu>
-            </Dropdown>
+                  </DropdownMenu>
+                </Dropdown>
 
-            {/* User Profile Dropdown */}
-            <Dropdown
-              onClick={() => setUserProfile(!userProfile)}
-              isOpen={userProfile}
-              toggle={dropDownuserprofile}
-              className="list-inline-item"
-            >
-              <DropdownToggle
-                to="#"
-                className="header-item"
-                id="userdropdown"
-                type="button"
-                tag="a"
-                aria-expanded="false"
-              >
-                <img src={profileImage} alt="mdo" width="35" height="35" className="rounded-circle me-1" />
-                <span className="d-none d-md-inline-block fw-medium">Hi, Jansh</span>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-end" aria-labelledby="userdropdown" end>
-                <li><Link className="dropdown-item" to="/managejobs">Manage Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/bookmarkjobs">Bookmarks Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/myprofile">My Profile</Link></li>
-                <li><Link className="dropdown-item" to="/signout">Logout</Link></li>
-              </DropdownMenu>
-            </Dropdown>
+                {/* User Profile Dropdown */}
+                <Dropdown
+                  isOpen={userProfile}
+                  toggle={dropDownuserprofile}
+                  className="list-inline-item"
+                >
+                  <DropdownToggle
+                    href="#"
+                    className="header-item"
+                    id="userdropdown"
+                    type="button"
+                    tag="a"
+                  >
+                    <img
+                      src={profileImage}
+                      alt="Profile"
+                      width="35"
+                      height="35"
+                      className="rounded-circle me-1"
+                    />
+                    <span className="d-none d-md-inline-block fw-medium">
+                      Hi, {user?.name || 'User'}
+                    </span>
+                  </DropdownToggle>
+                  <DropdownMenu className="dropdown-menu-end" end>
+                    {getRoleBasedNavItems()}
+                    <li><hr className="dropdown-divider" /></li>
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </DropdownMenu>
+                </Dropdown>
+              </>
+            )}
           </ul>
         </Container>
       </nav>

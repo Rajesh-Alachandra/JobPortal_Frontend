@@ -44,7 +44,7 @@ const RightSideContent = () => {
       companyImg: jobImage1,
       jobDescription: "HTML Developer",
       experience: "0-2 Yrs Exp.",
-      companyName: "Jobcy Technology Pvt.Ltd",
+      companyName: "Katlyst Technology Pvt.Ltd",
       location: "California",
       salary: "$250 - $800 / month",
       fullTime: true,
@@ -87,7 +87,7 @@ const RightSideContent = () => {
       companyImg: jobImage3,
       jobDescription: "HTML Developer",
       experience: "2-4 Yrs Exp.",
-      companyName: "Jobcy Technology Pvt.Ltd",
+      companyName: "Katlyst Technology Pvt.Ltd",
       location: "California",
       salary: "$250 - $800 / month",
       freeLance: true,
@@ -106,7 +106,7 @@ const RightSideContent = () => {
       companyImg: jobImage4,
       jobDescription: "Java Developer",
       experience: "0-2 Yrs Exp.",
-      companyName: "Jobcy Technology Pvt.Ltd",
+      companyName: "Katlyst Technology Pvt.Ltd",
       location: "California",
       salary: "$450 - $800 / month",
       freeLance: true,
@@ -123,13 +123,13 @@ const RightSideContent = () => {
   ];
   return (
     <React.Fragment>
-       {isGallery ? (
+      {isGallery ? (
         <Lightbox
-        open={isGallery}
-        close={() => setisGallery(false)}
-        index={photoIndex}
-        slides={images.map((image) => ({ src: image }))}
-      />
+          open={isGallery}
+          close={() => setisGallery(false)}
+          index={photoIndex}
+          slides={images.map((image) => ({ src: image }))}
+        />
       ) : null}
       <Col lg={8}>
         <Card className="ms-lg-4 mt-4 mt-lg-0">
@@ -262,12 +262,12 @@ const RightSideContent = () => {
                                 jobVacancyPostDetails.fullTime === true
                                   ? "badge bg-success-subtle text-success fs-13 mt-1 mx-1"
                                   : jobVacancyPostDetails.partTime === true
-                                  ? "badge bg-danger-subtle text-danger fs-13 mt-1 mx-1"
-                                  : jobVacancyPostDetails.freeLance === true
-                                  ? "badge bg-primary-subtle text-primary fs-13 mt-1 mx-1"
-                                  : jobVacancyPostDetails.internship === true
-                                  ? "badge bg-info-subtle text-info mt-1"
-                                  : ""
+                                    ? "badge bg-danger-subtle text-danger fs-13 mt-1 mx-1"
+                                    : jobVacancyPostDetails.freeLance === true
+                                      ? "badge bg-primary-subtle text-primary fs-13 mt-1 mx-1"
+                                      : jobVacancyPostDetails.internship === true
+                                        ? "badge bg-info-subtle text-info mt-1"
+                                        : ""
                               }
                             >
                               {jobVacancyPostDetails.timing}

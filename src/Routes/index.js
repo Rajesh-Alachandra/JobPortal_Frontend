@@ -65,7 +65,7 @@ const AuthRoute = ({ children }) => {
         if (role === 'employer') {
             return <Navigate to="/employer/dashboard" replace />;
         } else if (role === 'jobseeker') {
-            return <Navigate to="/jobseeker/dashboard" replace />;
+            return <Navigate to="/jobseeker/joblist" replace />; // This should go to joblist
         }
     }
 
