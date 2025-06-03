@@ -13,10 +13,10 @@ const Home = () => {
       <Jobcatogaries />
       <JobList />
       <HowItWorks />
-      <Cta />
+      {/* <Cta />
       <Testimonal />
-      <Blog />
-      <Client />
+      <Blog /> */}
+      {/* <Client /> */}
     </React.Fragment>
   );
 };

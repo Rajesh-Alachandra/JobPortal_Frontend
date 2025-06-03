@@ -6,7 +6,6 @@ import TopBar from "../CommonLayout/TopBar";
 import NavBar from "../CommonLayout/NavBar";
 import Subscribe from "../CommonLayout/Subscribe";
 import Footer from "../CommonLayout/Footer";
-import StyleSwitcher from "../CommonLayout/StyleSwitcher";
 import ScrolltoTop from "../../components/ScrolltoTop";
 
 const Layout = (props) => {
@@ -20,7 +19,6 @@ const Layout = (props) => {
             <div className="page-content">{props.children}</div>
             <Subscribe />
             <Footer />
-            <StyleSwitcher />
             <ScrolltoTop />
           </div>
         </div>
