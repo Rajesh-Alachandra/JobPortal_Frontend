@@ -14,14 +14,14 @@ const JobList = () => {
       <section className="section">
         <Container>
           <Row>
-            <Col lg={9}>
+            <Col lg={12}>
               <div className="me-lg-5">
                 <JobSearchOptions />
-                <Popular />
+                {/* <Popular /> */}
                 <JobVacancyList />
               </div>
             </Col>
-            <Sidebar />
+            {/* <Sidebar /> */}
           </Row>
         </Container>
       </section>

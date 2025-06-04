@@ -1,157 +1,155 @@
-//AuthContext.js
+// AuthContext.js
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { noAuthAxios } from './axiosInstance';
 
-// Create the AuthContext
+// Create the authentication context
 const AuthContext = createContext();
 
-// Dummy user data for testing
-const DUMMY_USERS = {
-    employer: {
-        id: 1,
-        email: 'employer@example.com',
-        password: 'employer123',
-        role: 'employer',
-        name: 'John Employer',
-        company: 'Tech Corp Inc.',
-        profile: {
-            companySize: '100-500',
-            industry: 'Technology',
-            location: 'San Francisco, CA'
-        }
-    },
-    jobseeker: {
-        id: 2,
-        email: 'jobseeker@example.com',
-        password: 'jobseeker123',
-        role: 'jobseeker',
-        name: 'Jane Jobseeker',
-        profile: {
-            skills: ['JavaScript', 'React', 'Node.js'],
-            experience: '3 years',
-            location: 'New York, NY',
-            resume: 'Software Developer with 3 years experience...'
-        }
-    }
-};
-
-// AuthProvider component
+// AuthProvider component wraps your entire app to provide auth state
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    // Global auth state
+    const [user, setUser] = useState(null);           // Logged-in user data
+    const [token, setToken] = useState(null);         // Auth token (JWT)
+    const [loading, setLoading] = useState(true);     // Indicates if auth state is initializing or updating
 
-    // Initialize auth state from localStorage
+    // Load user and token from localStorage when app starts
     useEffect(() => {
-        const initAuth = () => {
-            try {
-                const storedUser = localStorage.getItem('authUser');
-                if (storedUser) {
-                    setUser(JSON.parse(storedUser));
-                }
-            } catch (error) {
-                console.error('Error loading auth state:', error);
-                localStorage.removeItem('authUser');
-            } finally {
-                setLoading(false);
-            }
-        };
+        const storedUser = localStorage.getItem('authUser');
+        const storedToken = localStorage.getItem('authToken');
 
-        initAuth();
+        if (storedUser && storedToken) {
+            setUser(JSON.parse(storedUser));
+            setToken(storedToken);
+        }
+
+        setLoading(false);
     }, []);
 
-    // Login function
+    // LOGIN FUNCTION
     const login = async (email, password) => {
         try {
             setLoading(true);
 
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Make login request to API
+            const response = await noAuthAxios.post('auth/login', { email, password });
 
-            // Find matching user
-            const foundUser = Object.values(DUMMY_USERS).find(
-                u => u.email === email && u.password === password
-            );
-
-            if (!foundUser) {
-                throw new Error('Invalid email or password');
+            // Check if response is successful
+            if (!response.data.success) {
+                throw new Error(response.data.message || 'Login failed');
             }
 
-            // Remove password from user object before storing
-            const { password: _, ...userWithoutPassword } = foundUser;
+            // Extract user data and token from the response
+            const userData = response.data.data.user;
+            const jwtToken = response.data.data.token;
 
-            setUser(userWithoutPassword);
-            localStorage.setItem('authUser', JSON.stringify(userWithoutPassword));
+            // Update state
+            setUser(userData);
+            setToken(jwtToken);
 
-            return userWithoutPassword;
+            // Persist in localStorage
+            localStorage.setItem('authUser', JSON.stringify(userData));
+            localStorage.setItem('authToken', jwtToken);
+
+            console.log('Login successful:', userData); // Debug log
+
+            return userData;
         } catch (error) {
-            throw error;
+            console.error('Login error:', error); // Debug log
+            throw new Error(error.response?.data?.message || error.message || 'Login failed');
         } finally {
             setLoading(false);
         }
     };
 
-    // Logout function
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem('authUser');
-    };
+    // REGISTER FUNCTION (for both employer and jobseeker)
+    const register = async (role, registrationData) => {
+        try {
+            setLoading(true);
 
-    // Check if user is authenticated
-    const isAuthenticated = () => {
-        return user !== null;
-    };
+            // Choose the correct endpoint based on role
+            const endpoint = role === 'employer' ? 'auth/register/employer' : 'auth/register/jobseeker';
 
-    // Get current user role
-    const getUserRole = () => {
-        return user?.role || null;
-    };
+            const response = await noAuthAxios.post(endpoint, registrationData);
 
-    // Update user profile
-    const updateProfile = (profileData) => {
-        if (user) {
-            const updatedUser = {
-                ...user,
-                ...profileData,
-                profile: {
-                    ...user.profile,
-                    ...profileData.profile
-                }
-            };
-            setUser(updatedUser);
-            localStorage.setItem('authUser', JSON.stringify(updatedUser));
+            // Check if response is successful
+            if (!response.data.success) {
+                throw new Error(response.data.message || 'Registration failed');
+            }
+
+            // Extract user data and token from the response
+            const userData = response.data.data.user;
+            const jwtToken = response.data.data.token;
+
+            // Update state
+            setUser(userData);
+            setToken(jwtToken);
+
+            // Persist in localStorage
+            localStorage.setItem('authUser', JSON.stringify(userData));
+            localStorage.setItem('authToken', jwtToken);
+
+            return userData;
+        } catch (error) {
+            throw new Error(error.response?.data?.message || error.message || 'Registration failed');
+        } finally {
+            setLoading(false);
         }
     };
 
+    // LOGOUT FUNCTION
+    const logout = () => {
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem('authUser');
+        localStorage.removeItem('authToken');
+    };
+
+    // Check if the user is authenticated
+    const isAuthenticated = () => {
+        const hasUser = !!user;
+        const hasToken = !!token;
+        console.log('Auth check - User:', hasUser, 'Token:', hasToken); // Debug log
+        return hasUser && hasToken;
+    };
+
+    // Get user role (employer or jobseeker)
+    const getUserRole = () => user?.role || null;
+
+    // Optional: Provide role-based redirect after login
+    const getRedirectPath = () => {
+        if (!user) return '/login';
+        if (user.role === 'employer') return '/employer/dashboard';
+        if (user.role === 'jobseeker') return '/jobseeker/joblist';
+        return '/';
+    };
+
+    // Auth context value provided to consumers
     const value = {
         user,
+        token,
         login,
+        register,
         logout,
         isAuthenticated,
         getUserRole,
-        updateProfile,
+        getRedirectPath,
         loading
     };
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    return (
+        <AuthContext.Provider value={value}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
-// Custom hook to use the AuthContext
+// Custom hook to use auth context in any component
 export const useAuth = () => {
     const context = useContext(AuthContext);
-    if (context === undefined) {
+    if (!context) {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
-};
-
-// Export dummy credentials for easy reference
-export const DUMMY_CREDENTIALS = {
-    employer: {
-        email: 'employer@example.com',
-        password: 'employer123'
-    },
-    jobseeker: {
-        email: 'jobseeker@example.com',
-        password: 'jobseeker123'
-    }
 };

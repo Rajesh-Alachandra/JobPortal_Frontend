@@ -275,19 +275,6 @@ const EmployerLogin = () => {
                                                                     </Link>
                                                                 </p>
                                                             </div>
-
-                                                            {/* Alternative Login */}
-                                                            <div className="mt-3 text-center">
-                                                                <p className="mb-0 text-white-70">
-                                                                    Looking for a job?{" "}
-                                                                    <Link
-                                                                        to="/jobseeker/login"
-                                                                        className="text-white text-decoration-underline"
-                                                                    >
-                                                                        Job Seeker Login
-                                                                    </Link>
-                                                                </p>
-                                                            </div>
                                                         </div>
                                                     </CardBody>
                                                 </Col>

@@ -22,20 +22,26 @@ const validationSchema = Yup.object({
 });
 
 const JobSeekerLogin = () => {
-    const { login, isAuthenticated, loading } = useAuth();
+    const { login, isAuthenticated, loading, user } = useAuth();
+
     const navigate = useNavigate();
     const location = useLocation();
 
     const [loginError, setLoginError] = useState("");
-    const [showCredentials, setShowCredentials] = useState(false);
 
     // Redirect if already authenticated
     useEffect(() => {
         if (isAuthenticated()) {
-            const from = location.state?.from?.pathname || '/jobseeker/joblist';
-            navigate(from, { replace: true });
+            // Check if user is a jobseeker to prevent wrong role access
+            if (user?.role === 'jobseeker') {
+                const from = location.state?.from?.pathname || '/jobseeker/joblist';
+                navigate(from, { replace: true });
+            } else if (user?.role === 'employer') {
+                // Redirect employer to their dashboard
+                navigate('/employer/dashboard', { replace: true });
+            }
         }
-    }, [isAuthenticated, navigate, location]);
+    }, [isAuthenticated, navigate, location, user]);
 
     // Initial form values
     const initialValues = {
@@ -44,20 +50,27 @@ const JobSeekerLogin = () => {
         rememberMe: false
     };
 
+    // Function to fill demo credentials
+    const fillDemoCredentials = (setFieldValue) => {
+        setFieldValue('email', 'jobseeker@example.com');
+        setFieldValue('password', 'Password123');
+    };
+
     // Handle form submission
     const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
         try {
             setLoginError("");
+            setSubmitting(true);
 
-            const user = await login(values.email, values.password);
+            const userData = await login(values.email, values.password);
 
-            // Check if the logged-in user is a job seeker
-            if (user.role !== 'jobseeker') {
-                setLoginError("Access denied. This login is for job seekers only.");
+            // Check if the logged-in user is a jobseeker
+            if (userData.role !== 'jobseeker') {
+                setLoginError("This login is for job seekers only. Please use the appropriate login page.");
                 return;
             }
 
-            // Redirect to intended page or dashboard
+            // Redirect to intended page or jobseeker dashboard
             const from = location.state?.from?.pathname || '/jobseeker/joblist';
             navigate(from, { replace: true });
 
@@ -68,13 +81,10 @@ const JobSeekerLogin = () => {
         }
     };
 
-    // Auto-fill demo credentials
-    const fillDemoCredentials = (setFieldValue) => {
-        setFieldValue('email', 'jobseeker@example.com');
-        setFieldValue('password', 'jobseeker123');
-    };
-
-    document.title = "Job Seeker Sign In | Katlyst - Job Listing Template";
+    // Set document title
+    useEffect(() => {
+        document.title = "Job Seeker Sign In | Katlyst - Job Listing Template";
+    }, []);
 
     return (
         <React.Fragment>
@@ -90,16 +100,7 @@ const JobSeekerLogin = () => {
                                                 <Col lg={6} className="text-center">
                                                     <CardBody className="p-4">
                                                         <Link to="/">
-                                                            <img
-                                                                src={lightLogo}
-                                                                alt="Logo"
-                                                                className="logo-light"
-                                                            />
-                                                            <img
-                                                                src={darkLogo}
-                                                                alt="Logo"
-                                                                className="logo-dark"
-                                                            />
+                                                            <span className="ms-2 fw-bold" style={{ fontSize: "1.5rem", letterSpacing: "1px" }}>Katlyst</span>
                                                         </Link>
                                                         <div className="mt-5">
                                                             <img
@@ -114,31 +115,11 @@ const JobSeekerLogin = () => {
                                                     <CardBody className="auth-content p-5 h-100 text-white">
                                                         <div className="w-100">
                                                             <div className="text-center mb-4">
-                                                                <h5>Welcome Back Job Seeker!</h5>
+                                                                <h5>Welcome Back!</h5>
                                                                 <p className="text-white-70">
                                                                     Sign in to explore job opportunities and manage your applications.
                                                                 </p>
                                                             </div>
-
-                                                            {/* Demo Credentials Info */}
-                                                            {/* <div className="mb-3">
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-outline-light btn-sm"
-                                                                    onClick={() => setShowCredentials(!showCredentials)}
-                                                                >
-                                                                    {showCredentials ? 'Hide' : 'Show'} Demo Credentials
-                                                                </button>
-                                                                {showCredentials && (
-                                                                    <div className="mt-2 p-2 bg-white bg-opacity-10 rounded">
-                                                                        <small className="text-white-70">
-                                                                            <strong>Demo Job Seeker Account:</strong><br />
-                                                                            Email: jobseeker@example.com<br />
-                                                                            Password: jobseeker123
-                                                                        </small>
-                                                                    </div>
-                                                                )}
-                                                            </div> */}
 
                                                             {/* Login Error Alert */}
                                                             {loginError && (
@@ -230,7 +211,7 @@ const JobSeekerLogin = () => {
                                                                         <div className="mb-3 text-center">
                                                                             <button
                                                                                 type="button"
-                                                                                className="btn btn-dark-outline  btn-sm"
+                                                                                className="btn btn-outline-light btn-sm"
                                                                                 onClick={() => fillDemoCredentials(setFieldValue)}
                                                                                 disabled={isSubmitting || loading}
                                                                             >
@@ -281,10 +262,10 @@ const JobSeekerLogin = () => {
                                                                 <p className="mb-0 text-white-70">
                                                                     Looking to hire?{" "}
                                                                     <Link
-                                                                        to="/employer/login"
+                                                                        to="/employer/register"
                                                                         className="text-white text-decoration-underline"
                                                                     >
-                                                                        Employer Login
+                                                                        Employer Sign Up
                                                                     </Link>
                                                                 </p>
                                                             </div>

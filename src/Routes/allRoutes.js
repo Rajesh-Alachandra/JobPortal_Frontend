@@ -146,7 +146,7 @@ const authRoutes = [
   // Role-specific auth routes
   { path: "/employer/login", component: <EmployerLogin /> },
   { path: "/employer/register", component: <EmployerRegister /> },
-  { path: "/jobseeker/login", component: <JobSeekerLogin /> },
+  { path: "/login", component: <JobSeekerLogin /> },
   { path: "/jobseeker/register", component: <JobSeekerRegister /> },
 
   // General auth routes

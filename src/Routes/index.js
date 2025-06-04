@@ -47,7 +47,7 @@ const JobSeekerRoute = ({ children }) => {
     if (loading) return <Loader />;
 
     if (!isAuthenticated() || getUserRole() !== 'jobseeker') {
-        return <Navigate to="/jobseeker/login" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     return children;

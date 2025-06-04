@@ -16,6 +16,7 @@ import withRouter from "../../components/withRouter";
 import darkLogo from "../../assets/images/logo-dark.png";
 import lightLogo from "../../assets/images/logo-light.png";
 import profileImage from "../../assets/images/profile.jpg";
+import { LogInIcon } from "lucide-react";
 
 const NavBar = (props) => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -82,8 +83,9 @@ const NavBar = (props) => {
       >
         <Container fluid className="custom-container">
           <Link className="navbar-brand text-dark fw-bold me-auto" to="/">
-            <img src={darkLogo} height="22" alt="" className="logo-dark" />
-            <img src={lightLogo} height="22" alt="" className="logo-light" />
+            {/* <img src={darkLogo} alt="Katlyst Logo" height="28" className="logo-dark" />
+            <img src={lightLogo} alt="Katlyst Logo" height="28" className="logo-light" /> */}
+            <span className="ms-2 fw-bold" style={{ fontSize: "1.5rem", letterSpacing: "1px" }}>Katlyst</span>
           </Link>
           <div>
             <NavbarToggler
@@ -111,16 +113,19 @@ const NavBar = (props) => {
             {/* Show login buttons if not authenticated */}
             {!isAuthenticated() ? (
               <>
-                <li className="list-inline-item me-3">
-                  <Link to="/employer/login" className="btn btn-outline-primary btn-sm">
-                    Employer Login
+                <li className="list-inline-item d-flex align-items-center">
+                  <Link to="/login" className="btn btn-primary btn-sm">
+                   <LogInIcon/> Login
+                  </Link>
+                  <Link
+                    to="/employer/register"
+                    className="ms-3 text-decoration-none text-muted"
+                    style={{ cursor: "pointer" }}
+                  >
+                    Employer / Post Jobs
                   </Link>
                 </li>
-                <li className="list-inline-item">
-                  <Link to="/jobseeker/login" className="btn btn-primary btn-sm">
-                    Job Seeker Login
-                  </Link>
-                </li>
+
               </>
             ) : (
               <>
